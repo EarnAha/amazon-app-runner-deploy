@@ -211,9 +211,10 @@ function getEnvironmentVariables(
 ): Record<string, string> | undefined {
   if (envVarNames.length > 0) {
     const mapped = envVarNames.reduce((acc: Record<string, string>, env) => {
-      const envVarValue = process.env[env.replace(replaceStr, '')];
+      const newEnvName = env.replace(replaceStr, '');
+      const envVarValue = process.env[newEnvName];
       if (envVarValue !== undefined) {
-        acc[env] = envVarValue;
+        acc[newEnvName] = envVarValue;
       }
       return acc;
     }, {});
