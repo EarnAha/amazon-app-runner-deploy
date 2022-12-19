@@ -1,4 +1,4 @@
-import { getInput, getMultilineInput } from '@actions/core';
+import {getInput, getMultilineInput, info} from '@actions/core';
 import { Runtime } from '@aws-sdk/client-apprunner';
 
 // supported GitHub action modes
@@ -207,12 +207,14 @@ function getRuntime(): Runtime {
 
 function getEnvironmentVariables(
   envVarNames: string[],
-  replaceStr,
+  replaceStr: string,
 ): Record<string, string> | undefined {
   if (envVarNames.length > 0) {
     const mapped = envVarNames.reduce((acc: Record<string, string>, env) => {
-      const newEnvName = env.replace(replaceStr, '');
+
+      const newEnvName = replaceStr ? env.replace(replaceStr, '') : env;
       const envVarValue = process.env[newEnvName];
+      info(`Finding giving env var key: [${newEnvName}], value: [${envVarValue}]`);
       if (envVarValue !== undefined) {
         acc[newEnvName] = envVarValue;
       }
